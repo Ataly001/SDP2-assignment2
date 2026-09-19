@@ -3,6 +3,6 @@ package assignment.gui;
 public class WindowsCheckbox implements Checkbox {
     @Override
     public void paint() {
-        System.out.println("Rendering Windows checkbox: [Fragile product warning]");
+        System.out.println("Rendering Windows checkbox: Fragile product warning");
     }
 }
