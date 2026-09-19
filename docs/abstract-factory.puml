@@ -1,0 +1,67 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+hide empty members
+
+title Abstract Factory Pattern (UI Components)
+
+package "assignment.gui" {
+    interface Button <<Abstract Product A>> {
+        + paint(): void
+    }
+
+    interface Checkbox <<Abstract Product B>> {
+        + paint(): void
+    }
+
+    class WindowsButton <<Concrete Product A1>> implements Button {
+        + paint(): void
+    }
+
+    class WindowsCheckbox <<Concrete Product B1>> implements Checkbox {
+        + paint(): void
+    }
+
+    class MacOSButton <<Concrete Product A2>> implements Button {
+        + paint(): void
+    }
+
+    class MacOSCheckbox <<Concrete Product B2>> implements Checkbox {
+        + paint(): void
+    }
+
+    interface GUIFactory <<Abstract Factory>> {
+        + createButton(): Button
+        + createCheckbox(): Checkbox
+    }
+
+    class WindowsFactory <<Concrete Factory 1>> implements GUIFactory {
+        + createButton(): Button
+        + createCheckbox(): Checkbox
+    }
+
+    class MacOSFactory <<Concrete Factory 2>> implements GUIFactory {
+        + createButton(): Button
+        + createCheckbox(): Checkbox
+    }
+}
+
+package "assignment" {
+    class DeliveryApplication <<Client>> {
+        - button: Button
+        - checkbox: Checkbox
+        + DeliveryApplication(factory: GUIFactory, logistics: Logistics)
+        + run(cargo: String, destination: String): void
+    }
+}
+
+WindowsFactory ..> WindowsButton : "creates"
+WindowsFactory ..> WindowsCheckbox : "creates"
+
+MacOSFactory ..> MacOSButton : "creates"
+MacOSFactory ..> MacOSCheckbox : "creates"
+
+DeliveryApplication --> GUIFactory : "requests components"
+DeliveryApplication --> Button : "renders"
+DeliveryApplication --> Checkbox : "renders"
+@enduml

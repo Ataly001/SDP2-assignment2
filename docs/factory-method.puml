@@ -1,0 +1,53 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+hide empty members
+
+title Factory Method Pattern (Logistics)
+
+package "assignment.logistics" {
+    interface Transport <<Product>> {
+        + deliver(cargo: String, destination: String): void
+    }
+
+    class Truck <<Concrete Product>> implements Transport {
+        + deliver(cargo: String, destination: String): void
+    }
+
+    class Ship <<Concrete Product>> implements Transport {
+        + deliver(cargo: String, destination: String): void
+    }
+
+    abstract class Logistics <<Creator>> {
+        + {abstract} createTransport(): Transport
+        + planDelivery(cargo: String, destination: String): void
+    }
+
+    class RoadLogistics <<Concrete Creator>> extends Logistics {
+        + createTransport(): Transport
+    }
+
+    class SeaLogistics <<Concrete Creator>> extends Logistics {
+        + createTransport(): Transport
+    }
+}
+
+package "assignment" {
+    class DeliveryApplication <<Client>> {
+        - logistics: Logistics
+        + DeliveryApplication(factory: GUIFactory, logistics: Logistics)
+        + run(cargo: String, destination: String): void
+    }
+}
+
+Logistics ..> Transport : "creates & uses"
+RoadLogistics ..> Truck : "instantiates"
+SeaLogistics ..> Ship : "instantiates"
+
+DeliveryApplication --> Logistics : "delegates delivery workflow"
+
+note right of Logistics::planDelivery
+  Transport transport = createTransport();
+  transport.deliver(cargo, destination);
+end note
+@enduml
